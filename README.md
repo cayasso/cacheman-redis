@@ -3,9 +3,7 @@
 [![Build Status](https://travis-ci.org/cayasso/cacheman-redis.png?branch=master)](https://travis-ci.org/cayasso/cacheman-redis)
 [![NPM version](https://badge.fury.io/js/cacheman-redis.png)](http://badge.fury.io/js/cacheman-redis)
 
-Redis standalone caching library for Node.JS and also cache engine for [cacheman](https://github.com/cayasso/cacheman)
-
-  npm install hilmi
+Redis standalone caching library for Node.JS and also cache engine for [cacheman](https://github.com/cayasso/cacheman).
 
 ## Instalation
 
@@ -21,15 +19,21 @@ var cache = new CachemanRedis();
 
 // set the value
 cache.set('my key', { foo: 'bar' }, function (error) {
+
   if (error) throw error;
 
   // get the value
   cache.get('my key', function (error, value) {
+
     if (error) throw error;
+
     console.log(value); //-> {foo:"bar"}
 
+    // delete entry
     cache.del('my key', function (error){
+      
       if (error) throw error;
+
       console.log('value deleted');
     });
 
@@ -90,7 +94,7 @@ cache.del('foo', function (err) {
 });
 ```
 
-### cache.clear([fn]])
+### cache.clear([fn])
 
 Clear the cache entirely, throwing away all values.
 
