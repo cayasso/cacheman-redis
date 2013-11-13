@@ -1,0 +1,31 @@
+{
+  "name": "cacheman-redis",
+  "version": "0.1.0",
+  "description": "Cacheman Redis engine",
+  "author": "Jonathan Brumley <cayasso@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cayasso/cacheman-redis.git"
+  },
+  "keywords": [
+    "cache",
+    "redis",
+    "caching",
+    "store",
+    "ttl",
+    "cacheman",
+    "cacheman-redis"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "*",
+    "expect.js": "*"
+  },
+  "dependencies": {
+    "redis": ">= 0.8.x"
+  }
+}
