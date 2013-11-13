@@ -74,7 +74,7 @@ cache.set('foo', { a: 'bar' }, 60, function (err, value) {
 
 ### cache.get(key, fn)
 
-Retreives a value for a given key, if there is no value for the given key a null value will be returned.
+Retrieves a value for a given key, if there is no value for the given key a null value will be returned.
 
 ```javascript
 cache.get(function (err, value) {
