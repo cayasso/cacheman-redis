@@ -21,8 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "mocha": "*",
-    "expect.js": "*"
+    "mocha": "*"
   },
   "dependencies": {
     "redis": ">= 0.8.x"
