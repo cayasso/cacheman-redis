@@ -72,13 +72,22 @@ RedisStore.prototype.set = function set(key, val, ttl, fn) {
   fn = fn || noop;
 
   try {
-    this.client.setex(key, (ttl || 60), JSON.stringify(val), function setter(err) {
-      if (err) return fn(err);
-      fn(null, val);
-    });
+    val = JSON.stringify(val)
   } catch (e) {
-    fn(e);
+    return fn(e);
   }
+
+  if (-1 === ttl) {
+    this.client.set(key, val, cb);
+  } else {
+    this.client.setex(key, (ttl || 60), val, cb);
+  }
+
+  function cb(err) {
+    if (err) return fn(err);
+    fn(null, val);
+  }
+  
 };
 
 /**
