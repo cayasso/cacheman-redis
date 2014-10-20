@@ -5,7 +5,7 @@ var assert = require('assert')
 describe('cacheman-redis', function () {
 
   before(function(done){
-    cache = new Cache({}, {});
+    cache = new Cache({ port: 6379, host: 'localhost' }, {});
     done();
   });
 
@@ -20,7 +20,7 @@ describe('cacheman-redis', function () {
     assert.ok(cache.del);
     assert.ok(cache.clear);
   });
-    
+
   it('should store items', function (done) {
     cache.set('test1', { a: 1 }, function (err) {
       if (err) return done(err);
@@ -128,6 +128,12 @@ describe('cacheman-redis', function () {
           done();
         });
       }, 1000);
+    });
+  });
+
+  it('should clear an empty cache', function(done) {
+    cache.clear('no-entries', function(err, data) {
+      done();
     });
   });
 
