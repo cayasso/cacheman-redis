@@ -125,6 +125,7 @@ RedisStore.prototype.clear = function clear(key, fn) {
   store.client.keys(key + '*', function keys(err, data) {
     if (err) return fn(err);
     var count = data.length;
+    if (count === 0) return fn(null, null);
     data.forEach(function each(key) {
       store.del(key, function del(err, data) {
         if (err) {

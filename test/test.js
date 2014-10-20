@@ -131,4 +131,10 @@ describe('cacheman-redis', function () {
     });
   });
 
+  it('should clear an empty cache', function(done) {
+    cache.clear('no-entries', function(err, data) {
+      done();
+    });
+  });
+
 });
