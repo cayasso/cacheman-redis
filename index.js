@@ -22,7 +22,14 @@ module.exports = RedisStore;
 function RedisStore(options, bucket) {
   options = options || {};
   this.bucket = bucket || {};
-  this.client = options.client || new redis.createClient(options.port, options.host, options);
+  if (options.client) {
+    this.client = options.client;
+  } else if (!options.port && !options.host) {
+    this.client = new redis.createClient();
+  } else {
+    this.client = new redis.createClient(options.port, options.host, options);
+  }
+
   if (options.password) {
     this.client.auth(options.password, function auth(err){
       if (err) throw err;
