@@ -21,7 +21,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "pre-commit": "0.0.10"
   },
   "dependencies": {
     "redis": ">= 0.8.x"
