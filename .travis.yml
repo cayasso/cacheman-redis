@@ -5,3 +5,5 @@ node_js:
   - "0.8"
 services:
   - redis
+before_install:
+  - 'if [ "${TRAVIS_NODE_VERSION}" == "0.8" ] ; then npm install -g npm@1.4.28; fi'
