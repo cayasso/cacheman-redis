@@ -3,6 +3,7 @@
  */
 
 var redis = require('redis')
+  , uri = require('parse-redis-url')(redis)
   , noop = function () {};
 
 /**
@@ -14,17 +15,25 @@ module.exports = RedisStore;
 /**
  * RedisStore constructor.
  *
- * @param {Object} options
- * @param {Bucket} bucket
+ * @param {String|Object} options
  * @api public
  */
 
-function RedisStore(options, bucket) {
+function RedisStore(options) {
+
+  if (!(this instanceof RedisStore)) return new RedisStore(options);
+
   options = options || {};
-  this.bucket = bucket || {};
-  if (options.client) {
+
+  if ('string' === typeof options) {
+    options = uri.parse(options);
+  }
+
+  if ('function' === typeof options.setex) {
+    this.client = options;
+  } else if (options.client) {
     this.client = options.client;
-  } else if (!options.port && !options.host) {
+  }  else if (!options.port && !options.host) {
     this.client = new redis.createClient();
   } else {
     this.client = new redis.createClient(options.port, options.host, options);
@@ -32,6 +41,12 @@ function RedisStore(options, bucket) {
 
   if (options.password) {
     this.client.auth(options.password, function auth(err){
+      if (err) throw err;
+    });
+  }
+
+  if (options.database) {
+    this.client.select(options.database, function select(err) {
       if (err) throw err;
     });
   }
@@ -111,7 +126,7 @@ RedisStore.prototype.del = function del(key, fn) {
 };
 
 /**
- * Clear all entries for this bucket.
+ * Clear all entries for this key in cache.
  *
  * @param {String} key
  * @param {Function} fn

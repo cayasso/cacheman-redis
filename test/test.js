@@ -1,5 +1,7 @@
 var assert = require('assert')
+  , redis = require('redis')
   , Cache = require('../')
+  , uri = 'redis://127.0.0.1:6379'
   , cache;
 
 describe('cacheman-redis', function () {
@@ -105,10 +107,10 @@ describe('cacheman-redis', function () {
 
   it('should expire key', function (done) {
     this.timeout(0);
-    cache.set('test1', { a: 1 }, 1, function (err) {
+    cache.set('test7', { a: 1 }, 1, function (err) {
       if (err) return done(err);
       setTimeout(function () {
-        cache.get('test1', function (err, data) {
+        cache.get('test7', function (err, data) {
         if (err) return done(err);
           assert.equal(data, null);
           done();
@@ -119,15 +121,53 @@ describe('cacheman-redis', function () {
 
   it('should not expire key', function (done) {
     this.timeout(0);
-    cache.set('test1', { a: 1 }, -1, function (err) {
+    cache.set('test8', { a: 1 }, -1, function (err) {
       if (err) return done(err);
       setTimeout(function () {
-        cache.get('test1', function (err, data) {
+        cache.get('test8', function (err, data) {
         if (err) return done(err);
           assert.deepEqual(data, { a: 1 });
           done();
         });
       }, 1000);
+    });
+  });
+
+  it('should allow passing redis connection string', function (done) {
+    cache = Cache(uri);
+    cache.set('test9', { a: 1 }, function (err) {
+      if (err) return done(err);
+      cache.get('test9', function (err, data) {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        done();
+      });
+    });
+  });
+
+  it('should allow passing redis client as first argument', function (done) {
+    var client = redis.createClient();
+    cache = Cache(client);
+    cache.set('test10', { a: 1 }, function (err) {
+      if (err) return done(err);
+      cache.get('test10', function (err, data) {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        done();
+      });
+    });
+  });
+
+  it('should allow passing redis client as client in options', function (done) {
+    var client = redis.createClient();
+    cache = Cache({ client: client });
+    cache.set('test11', { a: 1 }, function (err) {
+      if (err) return done(err);
+      cache.get('test11', function (err, data) {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        done();
+      });
     });
   });
 

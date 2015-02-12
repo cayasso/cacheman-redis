@@ -48,7 +48,31 @@ cache.set('my key', { foo: 'bar' }, function (error) {
 Create `cacheman-redis` instance. `options` are redis valid options including `port` and `host`.
 
 ```javascript
-var cache = new CachemanRedis({ port: 9999, host: '127.0.0.1' });
+var options = { 
+  port: 9999,
+  host: '127.0.0.1',
+  password: 'my-p@ssw0rd'
+  database: 1
+};
+
+var cache = new CachemanRedis(options);
+```
+
+You can also pass a redis connection string as first arguments like this:
+
+```javascript
+var cache = new CachemanRedis('redis://127.0.0.1:6379');
+```
+
+Or pass a redis `client` instance directly as client:
+
+```javascript
+var client = redis.createClient();
+
+var cache = new CachemanRedis(client);
+
+// or
+cache = new CachemanRedis({ client: client });
 ```
 
 ### cache.set(key, value, [ttl, [fn]])
