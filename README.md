@@ -31,7 +31,7 @@ cache.set('my key', { foo: 'bar' }, function (error) {
 
     // delete entry
     cache.del('my key', function (error){
-      
+
       if (error) throw error;
 
       console.log('value deleted');
@@ -48,7 +48,7 @@ cache.set('my key', { foo: 'bar' }, function (error) {
 Create `cacheman-redis` instance. `options` are redis valid options including `port` and `host`.
 
 ```javascript
-var options = { 
+var options = {
   port: 9999,
   host: '127.0.0.1',
   password: 'my-p@ssw0rd'
@@ -126,6 +126,15 @@ Clear the cache entirely, throwing away all values.
 cache.clear(function (err) {
   if (err) throw err;
   // cache is now clear
+});
+```
+
+Clear the cache with glob-style patterns.
+
+```javascript
+cache.clear('test[0-1]', function (err) {
+  if (err) throw err;
+  // test0, test1 are now clear
 });
 ```
 
