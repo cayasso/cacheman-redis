@@ -109,7 +109,7 @@ RedisStore.prototype.set = function set(key, val, ttl, fn) {
     if (err) return fn(err);
     fn(null, val);
   }
-  
+
 };
 
 /**
@@ -143,7 +143,7 @@ RedisStore.prototype.clear = function clear(key, fn) {
   }
 
   fn = fn || noop;
-  
+
   store.client.keys(key + '*', function keys(err, data) {
     if (err) return fn(err);
     var count = data.length;

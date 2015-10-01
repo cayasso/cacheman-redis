@@ -22,7 +22,7 @@ describe('cacheman-redis', function () {
     assert.ok(cache.del);
     assert.ok(cache.clear);
   });
-    
+
   it('should store items', function (done) {
     cache.set('test1', { a: 1 }, function (err) {
       if (err) return done(err);
@@ -93,9 +93,29 @@ describe('cacheman-redis', function () {
       cache.get('test6', function (err, data) {
         if (err) return done(err);
         assert.equal(data, value);
-        cache.clear('', function (err) {
+        cache.clear(function (err) {
           if (err) return done(err);
           cache.get('test6', function (err, data) {
+            if (err) return done(err);
+            assert.equal(data, null);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  it('should clear items with glob-style patterns', function(done) {
+    var value = Date.now();
+
+    cache.set('test01', value, function (err) {
+      if (err) return done(err);
+      cache.get('test01', function (err, data) {
+        if (err) return done(err);
+        assert.equal(data, value);
+        cache.clear('test[0-1][0-1]', function (err) {
+          if (err) return done(err);
+          cache.get('test01', function (err, data) {
             if (err) return done(err);
             assert.equal(data, null);
             done();
