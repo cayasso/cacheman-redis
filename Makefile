@@ -1,8 +1,19 @@
-REPORTER = spec
+BABEL = ./node_modules/.bin/babel
+
+all: node
+
+node: lib
+	@mkdir -p node/
+	$(BABEL) lib -d node
+
+clean:
+	rm -rf node/
 
 test:
 	@./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
-		--bail
+		--reporter spec \
+		--require babel/register \
+		--recursive \
+		test
 
-.PHONY: test
+.PHONY: all clean test

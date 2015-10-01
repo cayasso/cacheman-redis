@@ -1,8 +1,10 @@
-var assert = require('assert')
-  , redis = require('redis')
-  , Cache = require('../')
-  , uri = 'redis://127.0.0.1:6379'
-  , cache;
+import assert from 'assert';
+import redis from 'redis';
+import Cache from '../lib/index';
+
+
+const uri = 'redis://127.0.0.1:6379';
+let cache;
 
 describe('cacheman-redis', function () {
 
@@ -12,8 +14,7 @@ describe('cacheman-redis', function () {
   });
 
   after(function(done){
-    cache.clear('test');
-    done();
+    cache.clear(done);
   });
 
   it('should have main methods', function () {
@@ -68,7 +69,7 @@ describe('cacheman-redis', function () {
   });
 
   it('should delete items', function (done) {
-    var value = Date.now();
+    let value = Date.now();
     cache.set('test5', value, function (err) {
       if (err) return done(err);
       cache.get('test5', function (err, data) {
@@ -87,13 +88,13 @@ describe('cacheman-redis', function () {
   });
 
   it('should clear items', function (done) {
-    var value = Date.now();
+    let value = Date.now();
     cache.set('test6', value, function (err) {
       if (err) return done(err);
       cache.get('test6', function (err, data) {
         if (err) return done(err);
         assert.equal(data, value);
-        cache.clear('', function (err) {
+        cache.clear(function (err) {
           if (err) return done(err);
           cache.get('test6', function (err, data) {
             if (err) return done(err);
@@ -133,8 +134,28 @@ describe('cacheman-redis', function () {
     });
   });
 
+  it('should get the same value subsequently', function(done) {
+    let val = 'Test Value';
+    cache.set('test', 'Test Value', function() {
+      cache.get('test', function(err, data) {
+        if (err) return done(err);
+        assert.strictEqual(data, val);
+        cache.get('test', function(err, data) {
+          if (err) return done(err);
+          assert.strictEqual(data, val);
+          cache.get('test', function(err, data) {
+            if (err) return done(err);
+             assert.strictEqual(data, val);
+             done();
+          });
+        });
+      });
+    });
+  });
+
+
   it('should allow passing redis connection string', function (done) {
-    cache = Cache(uri);
+    cache = new Cache(uri);
     cache.set('test9', { a: 1 }, function (err) {
       if (err) return done(err);
       cache.get('test9', function (err, data) {
@@ -146,8 +167,8 @@ describe('cacheman-redis', function () {
   });
 
   it('should allow passing redis client as first argument', function (done) {
-    var client = redis.createClient();
-    cache = Cache(client);
+    let client = redis.createClient();
+    cache = new Cache(client);
     cache.set('test10', { a: 1 }, function (err) {
       if (err) return done(err);
       cache.get('test10', function (err, data) {
@@ -159,8 +180,8 @@ describe('cacheman-redis', function () {
   });
 
   it('should allow passing redis client as client in options', function (done) {
-    var client = redis.createClient();
-    cache = Cache({ client: client });
+    let client = redis.createClient();
+    cache = new Cache({ client: client });
     cache.set('test11', { a: 1 }, function (err) {
       if (err) return done(err);
       cache.get('test11', function (err, data) {
@@ -172,7 +193,7 @@ describe('cacheman-redis', function () {
   });
 
   it('should clear an empty cache', function(done) {
-    cache.clear('no-entries', function(err, data) {
+    cache.clear(function(err, data) {
       done();
     });
   });
