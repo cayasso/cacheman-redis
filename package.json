@@ -1,6 +1,6 @@
 {
   "name": "cacheman-redis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Redis standalone caching library for Node.JS and also cache engine for Cacheman",
   "author": "Jonathan Brumley <cayasso@gmail.com>",
   "main": "./node/index",
@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-     "babel": "^5.8.29",
+    "babel": "^5.8.29",
     "mocha": "*",
     "pre-commit": "1.1.2"
   },
