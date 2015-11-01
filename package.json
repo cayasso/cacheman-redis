@@ -6,7 +6,7 @@
   "main": "./node/index",
   "scripts": {
     "test": "make test",
-    "postinstall": "make"
+    "prepublish": "make"
   },
   "repository": {
     "type": "git",
@@ -22,12 +22,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
+     "babel": "^5.8.29",
     "mocha": "*",
-    "pre-commit": "1.1.1"
+    "pre-commit": "1.1.2"
   },
   "dependencies": {
-    "babel": "^5.8.23",
     "parse-redis-url": "0.0.2",
-    "redis": ">= 2.0.x"
+    "redis": ">= 2.3.x"
   }
 }
