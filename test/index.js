@@ -1,4 +1,3 @@
-import 'babel/polyfill';
 import assert from 'assert';
 import redis from 'redis';
 import Cache from '../lib/index';
