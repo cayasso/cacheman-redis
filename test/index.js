@@ -8,7 +8,7 @@ let cache;
 describe('cacheman-redis', () => {
 
   before((done) => {
-    cache = new Cache({}, {});
+    cache = new Cache();
     done();
   });
 
