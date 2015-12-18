@@ -88,23 +88,23 @@ describe('cacheman-redis', () => {
 
   it('should delete items with glob-style patterns', (done) => {
     let value = Date.now();
-
-    Promise.all([
-      cache.set('foo_1', value),
-      cache.set('foo_2', value)
-    ]).then(() => {
-      cache.get('foo_1', (err, data) => {
+    cache.set('foo_1', value, (err) => {
+      if (err) return done(err);
+      cache.set('foo_2', value, (err) => {
         if (err) return done(err);
-        assert.equal(data, value);
-        cache.del('foo*', (err) => {
+        cache.get('foo_1', (err, data) => {
           if (err) return done(err);
-          cache.get('foo_1', (err, data) => {
+          assert.equal(data, value);
+          cache.del('foo*', (err) => {
             if (err) return done(err);
-            assert.equal(data, null);
-            cache.get('foo_2', (err, data) => {
+            cache.get('foo_1', (err, data) => {
               if (err) return done(err);
               assert.equal(data, null);
-              done();
+              cache.get('foo_2', (err, data) => {
+                if (err) return done(err);
+                assert.equal(data, null);
+                done();
+              });
             });
           });
         });
