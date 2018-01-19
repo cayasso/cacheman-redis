@@ -3,6 +3,10 @@ import redis from 'redis';
 import Cache from '../lib/index';
 
 const uri = 'redis://127.0.0.1:6379';
+const connection = {
+  host: '127.0.0.1',
+  port: 6379
+}
 let cache;
 
 describe('cacheman-redis', () => {
@@ -215,6 +219,18 @@ describe('cacheman-redis', () => {
       });
     });
   });
+
+  it('should allow passing redis connection params as object', (done) => {
+    cache = new Cache(connection);
+    cache.set('test12', { a: 1 }, (err) => {
+      if (err) return done(err);
+      cache.get('test12', (err, data) => {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        done();
+      });
+    });
+  })
 
   it('should clear an empty cache', (done) => {
     cache.clear((err, data) => {
