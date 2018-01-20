@@ -2,21 +2,22 @@ import assert from 'assert';
 import redis from 'redis';
 import Cache from '../lib/index';
 
-const uri = 'redis://127.0.0.1:6379';
+const uri = 'redis://127.0.0.1:6379/5';
 const connection = {
   host: '127.0.0.1',
-  port: 6379
-}
-let cache;
+  port: 6379,
+  database: 6
+};
 
 describe('cacheman-redis', () => {
+  let cache = null;
 
-  before((done) => {
+  beforeEach((done) => {
     cache = new Cache();
     done();
   });
 
-  after((done) => {
+  afterEach((done) => {
     cache.clear(done);
   });
 
@@ -182,6 +183,19 @@ describe('cacheman-redis', () => {
     });
   });
 
+  it('should allow passing redis connection params as object', (done) => {
+    cache = new Cache(connection);
+    cache.set('test12', { a: 1 }, (err) => {
+      if (err) return done(err);
+      cache.get('test12', (err, data) => {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        assert.equal(cache.client.selected_db, 6);
+        done();
+      });
+    });
+  });
+
   it('should allow passing redis connection string', (done) => {
     cache = new Cache(uri);
     cache.set('test9', { a: 1 }, (err) => {
@@ -189,6 +203,7 @@ describe('cacheman-redis', () => {
       cache.get('test9', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
+        assert.equal(cache.client.selected_db, 5);
         done();
       });
     });
@@ -220,21 +235,9 @@ describe('cacheman-redis', () => {
     });
   });
 
-  it('should allow passing redis connection params as object', (done) => {
-    cache = new Cache(connection);
-    cache.set('test12', { a: 1 }, (err) => {
-      if (err) return done(err);
-      cache.get('test12', (err, data) => {
-        if (err) return done(err);
-        assert.equal(data.a, 1);
-        done();
-      });
-    });
-  })
-
   it('should clear an empty cache', (done) => {
     cache.clear((err, data) => {
-      done();
+      done(err);
     });
   });
 
