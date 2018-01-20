@@ -1,1 +1,4 @@
---compilers js:babel-core/register
+--require babel-core/register
+--reporter spec
+--recursive
+--exit
