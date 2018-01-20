@@ -185,9 +185,9 @@ describe('cacheman-redis', () => {
 
   it('should allow passing redis connection params as object', (done) => {
     cache = new Cache(connection);
-    cache.set('test12', { a: 1 }, (err) => {
+    cache.set('test9', { a: 1 }, (err) => {
       if (err) return done(err);
-      cache.get('test12', (err, data) => {
+      cache.get('test9', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
         assert.equal(cache.client.selected_db, 6);
@@ -198,9 +198,9 @@ describe('cacheman-redis', () => {
 
   it('should allow passing redis connection string', (done) => {
     cache = new Cache(uri);
-    cache.set('test9', { a: 1 }, (err) => {
+    cache.set('test10', { a: 1 }, (err) => {
       if (err) return done(err);
-      cache.get('test9', (err, data) => {
+      cache.get('test10', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
         assert.equal(cache.client.selected_db, 5);
@@ -212,9 +212,9 @@ describe('cacheman-redis', () => {
   it('should allow passing redis client as first argument', (done) => {
     let client = redis.createClient();
     cache = new Cache(client);
-    cache.set('test10', { a: 1 }, (err) => {
+    cache.set('test11', { a: 1 }, (err) => {
       if (err) return done(err);
-      cache.get('test10', (err, data) => {
+      cache.get('test11', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
         done();
@@ -225,9 +225,9 @@ describe('cacheman-redis', () => {
   it('should allow passing redis client as client in options', (done) => {
     let client = redis.createClient();
     cache = new Cache({ client: client });
-    cache.set('test11', { a: 1 }, (err) => {
+    cache.set('test12', { a: 1 }, (err) => {
       if (err) return done(err);
-      cache.get('test11', (err, data) => {
+      cache.get('test12', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
         done();
