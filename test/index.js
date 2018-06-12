@@ -2,17 +2,22 @@ import assert from 'assert';
 import redis from 'redis';
 import Cache from '../lib/index';
 
-const uri = 'redis://127.0.0.1:6379';
-let cache;
+const uri = 'redis://127.0.0.1:6379/5';
+const connection = {
+  host: '127.0.0.1',
+  port: 6379,
+  database: 6
+};
 
 describe('cacheman-redis', () => {
+  let cache = null;
 
-  before((done) => {
+  beforeEach((done) => {
     cache = new Cache();
     done();
   });
 
-  after((done) => {
+  afterEach((done) => {
     cache.clear(done);
   });
 
@@ -152,13 +157,27 @@ describe('cacheman-redis', () => {
     });
   });
 
-  it('should allow passing redis connection string', (done) => {
-    cache = new Cache(uri);
+  it('should allow passing redis connection params as object', (done) => {
+    cache = new Cache(connection);
     cache.set('test9', { a: 1 }, (err) => {
       if (err) return done(err);
       cache.get('test9', (err, data) => {
         if (err) return done(err);
         assert.equal(data.a, 1);
+        assert.equal(cache.client.selected_db, 6);
+        done();
+      });
+    });
+  });
+
+  it('should allow passing redis connection string', (done) => {
+    cache = new Cache(uri);
+    cache.set('test10', { a: 1 }, (err) => {
+      if (err) return done(err);
+      cache.get('test10', (err, data) => {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        assert.equal(cache.client.selected_db, 5);
         done();
       });
     });
@@ -167,19 +186,6 @@ describe('cacheman-redis', () => {
   it('should allow passing redis client as first argument', (done) => {
     let client = redis.createClient();
     cache = new Cache(client);
-    cache.set('test10', { a: 1 }, (err) => {
-      if (err) return done(err);
-      cache.get('test10', (err, data) => {
-        if (err) return done(err);
-        assert.equal(data.a, 1);
-        done();
-      });
-    });
-  });
-
-  it('should allow passing redis client as client in options', (done) => {
-    let client = redis.createClient();
-    cache = new Cache({ client: client });
     cache.set('test11', { a: 1 }, (err) => {
       if (err) return done(err);
       cache.get('test11', (err, data) => {
@@ -190,9 +196,22 @@ describe('cacheman-redis', () => {
     });
   });
 
+  it('should allow passing redis client as client in options', (done) => {
+    let client = redis.createClient();
+    cache = new Cache({ client: client });
+    cache.set('test12', { a: 1 }, (err) => {
+      if (err) return done(err);
+      cache.get('test12', (err, data) => {
+        if (err) return done(err);
+        assert.equal(data.a, 1);
+        done();
+      });
+    });
+  });
+
   it('should clear an empty cache', (done) => {
     cache.clear((err, data) => {
-      done();
+      done(err);
     });
   });
 
