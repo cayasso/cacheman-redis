@@ -141,9 +141,8 @@ class RedisStore {
 	}
 
 	/**
-   * Clear all entries for this key in cache.
+   * Clear all entries in cache.
    *
-   * @param {String} key
    * @param {Function} fn
    * @api public
    */
