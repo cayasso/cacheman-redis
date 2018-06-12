@@ -114,21 +114,6 @@ class RedisStore {
   }
 
   /**
-   * Delete entry. Supported glob-style patterns.
-   *
-   * @param {String} key
-   * @param {Function} fn
-   * @api private
-   */
-
-  _del(key, fn = noop) {
-    this.client.del(key, (err) => {
-      if (err) return fn(err)
-      fn(null, null)
-    })
-  }
-
-  /**
    * Delete an entry (Supported glob-style patterns).
    *
    * @param {String} key
@@ -137,7 +122,7 @@ class RedisStore {
    */
 
   del(key, fn = noop) {
-    this._del(`${this.prefix}${key}`, fn)
+    this.client.del(`${this.prefix}${key}`, fn)
   }
 
   /**
