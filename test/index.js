@@ -86,32 +86,6 @@ describe('cacheman-redis', () => {
     });
   });
 
-  it('should delete items with glob-style patterns', (done) => {
-    let value = Date.now();
-    cache.set('foo_1', value, (err) => {
-      if (err) return done(err);
-      cache.set('foo_2', value, (err) => {
-        if (err) return done(err);
-        cache.get('foo_1', (err, data) => {
-          if (err) return done(err);
-          assert.equal(data, value);
-          cache.del('foo*', (err) => {
-            if (err) return done(err);
-            cache.get('foo_1', (err, data) => {
-              if (err) return done(err);
-              assert.equal(data, null);
-              cache.get('foo_2', (err, data) => {
-                if (err) return done(err);
-                assert.equal(data, null);
-                done();
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-
   it('should clear items', (done) => {
     let value = Date.now();
     cache.set('test6', value, (err) => {
