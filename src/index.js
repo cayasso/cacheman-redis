@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const redis = require('redis')
+const redis = require('ioredis')
 const parser = require('parse-redis-url')
 
 /**
@@ -27,17 +27,19 @@ class RedisStore {
       options = parse(options)
     }
 
-    const { port, host, client, setex, password, database, prefix } = options
+    const { port, host, client, setex, password, database, prefix, cluster} = options
 
     if ('function' === typeof setex) {
       this.client = options
     } else if (client) {
       this.client = client
-    } else if (!port && !host) {
+    } else if (!port && !host && !cluster) {
       this.client = redis.createClient()
-    } else {
+    } else if(!cluster) {
       const opts = Object.assign({}, options, { prefix: null })
       this.client = redis.createClient(port, host, opts)
+    }else {
+      this.client = redis.createClient(new redis.Cluster(...cluster))
     }
 
     if (password) {
