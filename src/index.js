@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 
-const redis = require('ioredis')
+const Redis = require('ioredis')
+const redis = new Redis();
 const parser = require('parse-redis-url')
 
 /**
@@ -34,12 +35,12 @@ class RedisStore {
     } else if (client) {
       this.client = client
     } else if (!port && !host && !cluster) {
-      this.client = redis.createClient()
+      this.client = new Redis();
     } else if(!cluster) {
       const opts = Object.assign({}, options, { prefix: null })
-      this.client = redis.createClient(port, host, opts)
+      this.client = new Redis(port, host, opts)
     }else {
-      this.client = redis.createClient(new redis.Cluster(...cluster))
+      this.client = new Redis.Cluster(...cluster)
     }
 
     if (password) {
@@ -51,6 +52,7 @@ class RedisStore {
     if (database) {
       this.client.select(database, (err) => {
         if (err) throw err
+        this.client.selected_db = database
       })
     }
 
