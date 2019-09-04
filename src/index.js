@@ -5,14 +5,13 @@
  */
 
 const Redis = require('ioredis')
-const redis = new Redis();
 const parser = require('parse-redis-url')
 
 /**
  * Module constants.
  */
 
-const parse = parser(redis).parse
+const parse = parser(Redis).parse
 const noop = () => {}
 
 class RedisStore {
