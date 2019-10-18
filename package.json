@@ -26,6 +26,7 @@
     "redis": "^2.8.0"
   },
   "dependencies": {
+    "each": "1.2.1",
     "parse-redis-url": "0.0.2"
   },
   "peerDependencies": {

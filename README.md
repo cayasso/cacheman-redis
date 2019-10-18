@@ -31,7 +31,7 @@ cache.set('my key', { foo: 'bar' }, function (error) {
 
     // delete entry
     cache.del('my key', function (error){
-      
+
       if (error) throw error;
 
       console.log('value deleted');
@@ -48,7 +48,7 @@ cache.set('my key', { foo: 'bar' }, function (error) {
 Create `cacheman-redis` instance. `options` are redis valid options including `port` and `host`.
 
 ```javascript
-var options = { 
+var options = {
   port: 9999,
   host: '127.0.0.1',
   password: 'my-p@ssw0rd'
@@ -128,6 +128,18 @@ cache.clear(function (err) {
   // cache is now clear
 });
 ```
+
+### cache.scan(cursor, count, [fn])
+
+[Scan](https://redis.io/commands/scan) cache from a cursor point and return a count of values
+
+```javascript
+cache.set('foo', { a: 'bar' }, 10, function (err) {
+  cache.scan(0, 10, function (err, result) {
+    console.log(result) // { cursor: 0, entries: [{ key: 'foo', data: { a: 'bar' } }] }
+  });
+});
+````
 
 ## Run tests
 

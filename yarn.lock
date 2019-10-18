@@ -64,6 +64,11 @@ double-ended-queue@^2.1.0-0:
   version "2.1.0-0"
   resolved "https://registry.yarnpkg.com/double-ended-queue/-/double-ended-queue-2.1.0-0.tgz#103d3527fd31528f40188130c841efdd78264e5c"
 
+each@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/each/-/each-1.2.1.tgz#1ab10811c5141fbb0f8d7ca9b05679b351f70080"
+  integrity sha512-POUbnWaseHgI8I+icHo3jAMrCqoLgVWaI7yqcQ0nat4q2f2BFUVGAndMOvr2UZoHAGAnQqotaM9RI4kZcjtAcg==
+
 escape-string-regexp@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
