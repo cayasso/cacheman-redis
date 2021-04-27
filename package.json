@@ -23,7 +23,7 @@
   "devDependencies": {
     "mocha": "*",
     "pre-commit": "1.2.2",
-    "redis": "^2.8.0"
+    "redis": "^3.1.1"
   },
   "dependencies": {
     "each": "1.2.1",
