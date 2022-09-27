@@ -5,6 +5,8 @@
 
 Redis standalone caching library for Node.JS and also cache engine for [cacheman](https://github.com/cayasso/cacheman).
 
+Edit: Implemented ioredis to the library and allowed Cluster connections.
+
 ## Instalation
 
 ``` bash

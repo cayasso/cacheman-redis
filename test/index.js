@@ -1,5 +1,5 @@
 const assert = require('assert')
-const redis = require('redis')
+const redis = require('ioredis')
 const Cache = require('../src')
 
 const uri = 'redis://127.0.0.1:6379/5'

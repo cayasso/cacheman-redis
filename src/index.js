@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const redis = require('redis')
+const Redis = require('ioredis')
 const parser = require('parse-redis-url')
 const each = require('each')
 
@@ -12,7 +12,7 @@ const each = require('each')
  * Module constants.
  */
 
-const parse = parser(redis).parse
+const parse = parser(Redis).parse
 const noop = () => {}
 
 class RedisStore {
@@ -28,17 +28,19 @@ class RedisStore {
       options = parse(options)
     }
 
-    const { port, host, client, setex, password, database, prefix } = options
+    const { port, host, client, setex, password, database, prefix, cluster} = options
 
     if ('function' === typeof setex) {
       this.client = options
     } else if (client) {
       this.client = client
-    } else if (!port && !host) {
-      this.client = redis.createClient()
-    } else {
+    } else if (!port && !host && !cluster) {
+      this.client = new Redis();
+    } else if(!cluster) {
       const opts = Object.assign({}, options, { prefix: null })
-      this.client = redis.createClient(port, host, opts)
+      this.client = new Redis(port, host, opts)
+    }else {
+      this.client = new Redis.Cluster(...cluster)
     }
 
     if (password) {
@@ -50,6 +52,7 @@ class RedisStore {
     if (database) {
       this.client.select(database, (err) => {
         if (err) throw err
+        this.client.selected_db = database
       })
     }
 
