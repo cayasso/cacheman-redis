@@ -13,7 +13,7 @@ describe('cacheman-redis', () => {
   let cache = null
 
   beforeEach((done) => {
-    cache = new Cache()
+    cache = new Cache({ prefix: 'cacheman-redis:test' })
     done()
   })
 
@@ -26,6 +26,7 @@ describe('cacheman-redis', () => {
     assert.ok(cache.get)
     assert.ok(cache.del)
     assert.ok(cache.clear)
+    assert.ok(cache.scan)
   })
 
   it('should store items', (done) => {
@@ -212,6 +213,42 @@ describe('cacheman-redis', () => {
   it('should clear an empty cache', (done) => {
     cache.clear((err) => {
       done(err)
+    })
+  })
+
+  it('should scan and return results', (done) => {
+    const items = [
+      { key: 'test0',  data: { a: 'test0' } },
+      { key: 'test1',  data: { a: 'test1' } },
+      { key: 'test2',  data: { a: 'test2' } },
+      { key: 'test3',  data: { a: 'test3' } },
+      { key: 'test4',  data: { a: 'test4' } },
+      { key: 'test5',  data: { a: 'test5' } },
+      { key: 'test6',  data: { a: 'test6' } },
+      { key: 'test7',  data: { a: 'test7' } },
+      { key: 'test8',  data: { a: 'test8' } },
+      { key: 'test9',  data: { a: 'test9' } }
+    ]
+
+    const compare = (a, b) => {
+      if (a.key < b.key) return -1
+      else if (a.key > b.key) return 1
+      else return 0;
+    }
+
+    items.forEach((obj, index) => {
+      cache.set(obj.key, obj.data, (err) => {
+        assert.deepEqual(null, err)
+      })
+    })
+
+    cache.scan(0, 20, (err, result) => {
+      assert.deepEqual(null, err)
+      assert.equal(result.cursor, 0)
+
+      const entries = result.entries.sort(compare)
+      assert.deepEqual(items, entries)
+      done()
     })
   })
 })

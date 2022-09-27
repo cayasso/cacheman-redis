@@ -6,6 +6,7 @@
 
 const Redis = require('ioredis')
 const parser = require('parse-redis-url')
+const each = require('each')
 
 /**
  * Module constants.
@@ -150,6 +151,40 @@ class RedisStore {
             fn(null, null)
           }
         })
+      })
+    })
+  }
+
+  /**
+   * Scan for a number of entries from a cursor point
+   *
+   * @param {Number}   cursor
+   * @param {Number}   fn
+   * @param {Function} fn
+   * @api public
+   */
+
+  scan(cursor, count = 10, fn = noop) {
+    const entries = []
+    const prefix = this.prefix
+    const self = this
+
+    this.client.scan(cursor, 'MATCH', `${prefix}*`, 'COUNT', count, (err, data) => {
+      if (err) return fn(err)
+
+      const [newCursor, keys] = data
+
+      each(keys).call((key, index, next) => {
+        const _key = key.replace(`${this.prefix}`, '')
+
+        self.get(_key, (err, data) => {
+          if (err) return fn(err)
+
+          entries.push({ key: _key, data })
+          next()
+        })
+      }).next(() => {
+        fn(null, { cursor: Number(newCursor), entries })
       })
     })
   }
